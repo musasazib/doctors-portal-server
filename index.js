@@ -21,12 +21,21 @@ async function run() {
         const database = client.db('doctorsPortal');
         const appointmentCollection = database.collection('appointments');
 
+        app.get('/appointments', async (req, res) => {
+            const email = req.query.email;            //  -------
+            const query = { email: email };     // filter user
+            // console.log(query);
+            const cursor = appointmentCollection.find(query);
+            const appointments = await cursor.toArray();
+            res.json(appointments);
+        })
+
         app.post('/appointments', async (req, res) => {
             const appointment = req.body;
             // console.log(appointment);
             // res.json({ message: 'hello' })
             const result = await appointmentCollection.insertOne(appointment);
-            console.log(result);
+            // console.log(result);
             res.json(result);
 
         })
